@@ -6,6 +6,7 @@ class Ship {
   }
   hit() {
     // function that increases # of hits
+    this.hit++;
   }
   isSunk() {
     // function that checks if ship is sunk.
