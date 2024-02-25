@@ -5,10 +5,13 @@ export default class Ship {
     this.isSunk = false;
   }
   hit() {
-    // function that increases # of hits
+    this.hitCount++;
   }
   isSunk() {
     // function that checks if ship is sunk.
     // determines it based on length and number of hits taken.
+    if (this.hitCount > length) {
+      return true;
+    } else return false;
   }
 }
