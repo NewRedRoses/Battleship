@@ -1,26 +1,48 @@
-import Ship from "./Ship";
-
+// Gameboard class
 export default class GameBoard {
   constructor() {
     this.board = [];
-    this.ships = [];
     this.missedAttacks = [];
-    this.initializeBoard();
+    this.ships = [];
   }
-  initializeBoard() {
-    for (let i = 0; i < 10; i++) {
-      const row = [];
-      for (let j = 0; j < 10; j++) {
-        row.push(null);
+
+  placeShip(ship, x, y, isVertical) {
+    const shipCoordinates = [];
+    for (let i = 0; i < ship.length; i++) {
+      if (isVertical) {
+        this.board[x + i]
+          ? (this.board[x + i][y] = ship)
+          : (this.board[x + i] = [ship]);
+        shipCoordinates.push([x + i, y]);
+      } else {
+        this.board[x]
+          ? (this.board[x][y + i] = ship)
+          : (this.board[x] = [ship]);
+        shipCoordinates.push([x, y + i]);
       }
-      this.board.push(row);
     }
+    this.ships.push({ ship, coordinates: shipCoordinates });
   }
-  placeShip(ship, row, col, orientation) {
-    return row, col;
+
+  receiveAttack(x, y) {
+    let hitShip = null;
+    this.ships.forEach((shipObj) => {
+      if (
+        shipObj.coordinates.some(([shipX, shipY]) => shipX === x && shipY === y)
+      ) {
+        hitShip = shipObj.ship;
+        hitShip.hit();
+      }
+    });
+
+    if (!hitShip) {
+      this.missedAttacks.push([x, y]);
+    }
+
+    return hitShip;
   }
-  receivedAttack(row, col) {}
+
   allShipsSunk() {
-    return this.ships.every((ship) => shink.isSunk());
+    return this.ships.every((shipObj) => shipObj.ship.isSunk());
   }
 }

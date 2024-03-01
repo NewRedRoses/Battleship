@@ -1,30 +1,39 @@
 import GameBoard from "./GameBoard";
+import Ship from "./Ship";
 
-test("gameBoard is 10x10", () => {
-  const gameBoard = new GameBoard();
-  const grid10 = [
-    [null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null],
-  ];
-  expect(gameBoard.board).toStrictEqual(grid10);
-});
+// Jest tests for Gameboard class
+describe("Gameboard", () => {
+  let gameboard;
+  let battleship;
 
-test.skip("Place ship at cordinate: [1,3][2,1]", () => {
-  const cordinates = [
-    [0, 0],
-    [0, 1],
-  ];
-  const gameBoard = new GameBoard();
-  expect(gameBoard.placeShip("", cordinates[0][0], cordinates[0][1])).toBe(
-    [0, 0],
-    [0, 1],
-  );
+  beforeEach(() => {
+    gameboard = new GameBoard();
+    battleship = new Ship(4);
+  });
+
+  test("placeShip() should add the ship to the board", () => {
+    gameboard.placeShip(battleship, 2, 3, false);
+    expect(gameboard.ships.length).toBe(1);
+  });
+
+  test("receiveAttack() should register a hit on the correct ship", () => {
+    gameboard.placeShip(battleship, 2, 3, false);
+    gameboard.receiveAttack(2, 3);
+    expect(battleship.hits).toBe(1);
+  });
+
+  test("receiveAttack() should register a missed attack", () => {
+    gameboard.placeShip(battleship, 2, 3, false);
+    gameboard.receiveAttack(0, 0);
+    expect(gameboard.missedAttacks.length).toBe(1);
+  });
+
+  test("allShipsSunk() should return true when all ships are sunk", () => {
+    gameboard.placeShip(battleship, 2, 3, false);
+    battleship.hit();
+    battleship.hit();
+    battleship.hit();
+    battleship.hit();
+    expect(gameboard.allShipsSunk()).toBe(true);
+  });
 });
