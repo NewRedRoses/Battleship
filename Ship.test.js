@@ -1,24 +1,22 @@
 import Ship from "./Ship";
+// Jest tests for Ship class
+describe("Ship", () => {
+  test("hit() should increase the number of hits", () => {
+    const ship = new Ship(3);
+    ship.hit();
+    expect(ship.hits).toBe(1);
+  });
 
-test("Create ship with 10 hits", () => {
-  const object = new Ship(2);
-  object.hitCount = 10;
-  expect(object.hitCount).toBe(10);
-});
-test("ship takes 3 hits", () => {
-  const object = new Ship(2);
-  for (let i = 0; i < 3; i++) {
-    object.hit();
-  }
-  expect(object.hitCount).toBe(3);
-});
-test("ship is NOT sunken", () => {
-  const object = new Ship(10, 1);
-  expect(object.isSunk()).toBe(false);
-});
+  test("isSunk() should return true when all hits are equal to length", () => {
+    const ship = new Ship(2);
+    ship.hit();
+    ship.hit();
+    expect(ship.isSunk()).toBe(true);
+  });
 
-test("ship is sunken", () => {
-  const object = new Ship(10);
-  object.isSunk = true;
-  expect(object.isSunk).toBe(true);
+  test("isSunk() should return false when hits are less than length", () => {
+    const ship = new Ship(4);
+    ship.hit();
+    expect(ship.isSunk()).toBe(false);
+  });
 });
